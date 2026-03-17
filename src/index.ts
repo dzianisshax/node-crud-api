@@ -8,9 +8,10 @@ const startServer = async () => {
 
   fastify.register(productRoutes, { prefix: '/api' });
 
+  const port: number = Number(process.env.PORT) || 3000;
+
   try {
-    await fastify.listen({ port: 3000, host: '0.0.0.0' });
-    console.log(`Server listening at http://localhost:3000`);
+    await fastify.listen({ port, host: '0.0.0.0' });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
