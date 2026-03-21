@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { FastifyInstance } from 'fastify';
 import { buildApp } from '../app.js';
-import { CreateProductDTO } from '../types/product.js';
+import { ProductDTO } from '../types/product.js';
 
 describe('Product API - Scenario 1', () => {
   let app: FastifyInstance;
@@ -28,7 +28,7 @@ describe('Product API - Scenario 1', () => {
   });
 
   it('2. POST /api/products -> expects a new object to be created', async () => {
-    const newProductPayload: CreateProductDTO = {
+    const newProductPayload: ProductDTO = {
       name: 'Wireless Mouse',
       description: 'Wireless',
       price: 45,
@@ -67,7 +67,13 @@ describe('Product API - Scenario 1', () => {
   });
 
   it('4. PUT /api/products/{productId} -> expects an updated object with the same id', async () => {
-    const updatedPayload = { name: 'Wireless Mouse Pro', price: 65 };
+    const updatedPayload: ProductDTO = {
+      name: 'Wireless Mouse Pro',
+      description: 'Wireless',
+      price: 65,
+      category: 'Mouse',
+      inStock: true,
+    };
 
     const response = await app.inject({
       method: 'PUT',
