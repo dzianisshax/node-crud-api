@@ -1,8 +1,4 @@
-import {
-  Product,
-  CreateProductDTO,
-  UpdateProductDTO,
-} from '../types/product.js';
+import { Product, ProductDTO } from '../types/product.js';
 import { randomUUID } from 'crypto';
 
 class ProductStore {
@@ -16,7 +12,7 @@ class ProductStore {
     return this.products.get(id);
   }
 
-  create(data: CreateProductDTO): Product {
+  create(data: ProductDTO): Product {
     const newProduct: Product = {
       id: randomUUID(),
       ...data,
@@ -25,7 +21,7 @@ class ProductStore {
     return newProduct;
   }
 
-  update(id: string, data: UpdateProductDTO): Product | undefined {
+  update(id: string, data: ProductDTO): Product | undefined {
     const existing = this.products.get(id);
     if (!existing) return undefined;
 

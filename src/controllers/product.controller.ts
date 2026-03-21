@@ -1,10 +1,10 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { productService } from '../services/product.service.js';
-import { CreateProductDTO, UpdateProductDTO } from '../types/product.js';
+import { ProductDTO } from '../types/product.js';
 
 export const getAllProducts = async (
   req: FastifyRequest,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const products = productService.getAllProducts();
   return reply.send(products);
@@ -12,7 +12,7 @@ export const getAllProducts = async (
 
 export const getProductById = async (
   req: FastifyRequest<{ Params: { id: string } }>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const product = productService.getProductById(req.params.id);
   if (!product) {
@@ -25,16 +25,16 @@ export const getProductById = async (
 };
 
 export const createProduct = async (
-  req: FastifyRequest<{ Body: CreateProductDTO }>,
-  reply: FastifyReply,
+  req: FastifyRequest<{ Body: ProductDTO }>,
+  reply: FastifyReply
 ) => {
   const newProduct = productService.createProduct(req.body);
   return reply.code(201).send(newProduct);
 };
 
 export const updateProduct = async (
-  req: FastifyRequest<{ Params: { id: string }; Body: UpdateProductDTO }>,
-  reply: FastifyReply,
+  req: FastifyRequest<{ Params: { id: string }; Body: ProductDTO }>,
+  reply: FastifyReply
 ) => {
   const updatedProduct = productService.updateProduct(req.params.id, req.body);
   if (!updatedProduct) {
@@ -48,7 +48,7 @@ export const updateProduct = async (
 
 export const deleteProduct = async (
   req: FastifyRequest<{ Params: { id: string } }>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const isDeleted = productService.deleteProduct(req.params.id);
   if (!isDeleted) {

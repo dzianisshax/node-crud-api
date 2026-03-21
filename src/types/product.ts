@@ -7,5 +7,4 @@ export interface Product {
   inStock: boolean;
 }
 
-export type CreateProductDTO = Omit<Product, 'id'>;
-export type UpdateProductDTO = Partial<CreateProductDTO>;
+export type ProductDTO = Omit<Product, 'id'>;

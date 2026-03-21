@@ -1,5 +1,5 @@
 import { productStore } from '../store/product.store.js';
-import { CreateProductDTO, UpdateProductDTO } from '../types/product.js';
+import { ProductDTO } from '../types/product.js';
 
 export class ProductService {
   getAllProducts() {
@@ -10,11 +10,11 @@ export class ProductService {
     return productStore.findById(id);
   }
 
-  createProduct(data: CreateProductDTO) {
+  createProduct(data: ProductDTO) {
     return productStore.create(data);
   }
 
-  updateProduct(id: string, data: UpdateProductDTO) {
+  updateProduct(id: string, data: ProductDTO) {
     return productStore.update(id, data);
   }
 

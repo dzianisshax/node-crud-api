@@ -18,19 +18,10 @@ export async function productRoutes(fastify: FastifyInstance) {
     inStock: { type: 'boolean' },
   };
 
-  const createProductSchema = {
+  const productSchema = {
     body: {
       type: 'object',
       required: ['name', 'description', 'price', 'category', 'inStock'],
-      properties: productProperties,
-      additionalProperties: false,
-    },
-  };
-
-  const updateProductSchema = {
-    params: paramsIdSchema,
-    body: {
-      type: 'object',
       properties: productProperties,
       additionalProperties: false,
     },
@@ -46,12 +37,12 @@ export async function productRoutes(fastify: FastifyInstance) {
   });
 
   fastify.post('/products', {
-    schema: createProductSchema,
+    schema: productSchema,
     handler: productController.createProduct,
   });
 
   fastify.put('/products/:id', {
-    schema: updateProductSchema,
+    schema: productSchema,
     handler: productController.updateProduct,
   });
 
