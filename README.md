@@ -1,85 +1,166 @@
-# CRUD API
+# Product Catalog CRUD API
 
-## Description
+A simple, fast, and lightweight RESTful CRUD API for managing a product catalog, built with Node.js, Fastify, and TypeScript.
 
-Simple CRUD API for a **Product Catalog** using an in-memory database underneath. Use **Fastify** as the framework.
+## Features
 
-## Technical requirements
+- **CRUD Operations**: Full Create, Read, Update, and Delete functionality for products.
+- **RESTful API**: Follows standard REST conventions.
+- **TypeScript**: Fully typed codebase for better maintainability and developer experience.
+- **Fastify**: High-performance web framework with low overhead.
+- **Development Hot-Reload**: Uses `tsx watch` for instant feedback during development.
+- **Optimized Build**: Bundled with `tsup` for efficient production deployment.
+- **Testing**: Integrated with Vitest for unit and integration tests.
 
-- Task can be implemented in JavaScript or TypeScript
-- Use [Fastify](https://fastify.dev/) as the web framework
-- Only `fastify`, `@fastify/*` plugins, `nodemon`, `dotenv`, `cross-env`, `typescript`, `ts-node`, `ts-node-dev`, `tsx`, linter and its plugins, bundler and its plugins and loaders, formatter and its plugins, `uuid`, `@types/*` as well as libraries used for testing are allowed
-- Use 24.x.x version (24.10.0 or upper) of Node.js
-- Prefer asynchronous API whenever possible
+## Prerequisites
 
-## Implementation details
+Before you begin, ensure you have the following installed:
 
-1. Implemented endpoint `api/products`:
-    - **GET** `api/products` is used to get all products
-        - Server should answer with `status code` **200** and all product records
-    - **GET** `api/products/{productId}`
-        - Server should answer with `status code` **200** and the record with `id === productId` if it exists
-        - Server should answer with `status code` **400** and corresponding message if `productId` is invalid (not `uuid`)
-        - Server should answer with `status code` **404** and corresponding message if record with `id === productId` doesn't exist
-    - **POST** `api/products` is used to create a record about a new product and store it in the database
-        - Server should answer with `status code` **201** and newly created record
-        - Server should answer with `status code` **400** and corresponding message if request `body` does not contain **required** fields or if `price` is not a positive number
-    - **PUT** `api/products/{productId}` is used to update an existing product
-        - Server should answer with `status code` **200** and the updated record
-        - Server should answer with `status code` **400** and corresponding message if `productId` is invalid (not `uuid`)
-        - Server should answer with `status code` **404** and corresponding message if record with `id === productId` doesn't exist
-    - **DELETE** `api/products/{productId}` is used to delete an existing product from the database
-        - Server should answer with `status code` **204** if the record is found and deleted
-        - Server should answer with `status code` **400** and corresponding message if `productId` is invalid (not `uuid`)
-        - Server should answer with `status code` **404** and corresponding message if record with `id === productId` doesn't exist
+- **Node.js**: Version 24.10.0 or higher
+- **npm**: Version 10.9.2 or higher
 
-2. Products are stored as `objects` that have the following properties:
-    - `id` — unique identifier (`string`, `uuid`) generated on the server side
-    - `name` — product name (`string`, **required**)
-    - `description` — product description (`string`, **required**)
-    - `price` — product price (`number`, **required**, must be > 0)
-    - `category` — product category (`string`, **required**, e.g. `"electronics"`, `"books"`, `"clothing"`)
-    - `inStock` — whether the product is in stock (`boolean`, **required**)
+## Installation
 
-3. Requests to non-existing endpoints (e.g. `/some-non/existing/resource`) should be handled (server should answer with `status code` **404** and corresponding human-friendly message)
+> npm install
 
-4. Errors on the server side that occur during the processing of a request should be handled and processed correctly (server should answer with `status code` **500** and corresponding human-friendly message)
+## Running the Application
 
-5. Value of `port` on which the application is running should be stored in `.env` file
+The application can be run in two modes: development and production.
 
-- **Important:** The `.env` file itself should not be committed to the repository as it is considered a security bad practice. Please consider adding the `.env` file to `.gitignore`.
+## Development Mode
 
-    - Instead, create and commit an `.env.example` file that contains a list of required environment variables with reasonable default values
-    - Example of `.env.example` contents:
+In development mode, the server runs with hot-reload. Any changes you make to the source code will automatically restart the server.
 
-      ```
-      PORT=4000
-      ```
+> npm run start:dev
 
-6. There should be 2 modes of running the application (**development** and **production**):
-    - The application is run in development mode using `nodemon` or `ts-node-dev` (there is an `npm` script `start:dev`)
-    - The application is run in production mode (there is an `npm` script `start:prod` that starts the build process and then runs the bundled file)
+By default, the server will start on `http://localhost:3000`.
+You should see a message like:
 
-7. There could be some tests for the API (not less than **3** scenarios). Example of a test scenario:
-    1. Get all records with a `GET` `api/products` request (an empty array is expected)
-    2. A new object is created by a `POST` `api/products` request (a response containing the newly created record is expected)
-    3. With a `GET` `api/products/{productId}` request, we try to get the created record by its `id` (the created record is expected)
-    4. We try to update the created record with a `PUT` `api/products/{productId}` request (a response is expected containing an updated object with the same `id`)
-    5. With a `DELETE` `api/products/{productId}` request, we delete the created object by `id` (confirmation of successful deletion is expected)
-    6. With a `GET` `api/products/{productId}` request, we are trying to get the deleted object by `id` (expected answer is that there is no such object)
+> Server listening on http://localhost:3000
 
-8. There could be implemented horizontal scaling for the application. There should be an `npm` script `start:multi` that starts multiple instances of your application using the Node.js `Cluster` API (equal to the number of available parallelism - 1 on the host machine, each listening on port PORT + n) with a **load balancer** that distributes requests across them (using Round-robin algorithm). For example: available parallelism is 4, `PORT` is 4000. On run `npm run start:multi` it works the following way:
+## Production Mode
 
-- On `localhost:4000/api` the load balancer is listening for requests
-- On `localhost:4001/api`, `localhost:4002/api`, `localhost:4003/api` workers are listening for requests from the load balancer
-- When user sends a request to `localhost:4000/api`, the load balancer sends this request to `localhost:4001/api`, the next user request is sent to `localhost:4002/api` and so on
-- After sending a request to `localhost:4003/api`, the load balancer starts from the first worker again (sends request to `localhost:4001/api`)
-- State of the db should be consistent between different workers, for example:
-    1. First `POST` request addressed to `localhost:4001/api` creates a product
-    2. Second `GET` request addressed to `localhost:4002/api` should return the created product
-    3. Third `DELETE` request addressed to `localhost:4003/api` deletes the created product
-    4. Fourth `GET` request addressed to `localhost:4001/api` should return **404** status code for the created product
+For production, the application is built into a single, optimized bundle before starting.
 
-## Hints
+1. Build and Start (one command):
 
-- To generate all entities `id`s use [Node.js randomUUID](https://nodejs.org/dist/latest-v24.x/docs/api/crypto.html#cryptorandomuuidoptions)
+   > npm run start:prod
+
+   This command runs two scripts sequentially:
+   - build: Bundles the TypeScript code into dist/index.js.
+   - start: Runs the bundled code with Node.js.
+
+2. Build Only (if you want to build separately):
+
+   > npm run build
+
+3. Start Only (after building):
+
+   > npm run start
+
+The server will then run on `http://localhost:3000`
+
+## Product Schema
+
+All products in the catalog follow this schema:
+
+| Field         | Type          | Required             | Description                       | Validation             |
+| ------------- | ------------- | -------------------- | --------------------------------- | ---------------------- |
+| `id`          | string (UUID) | Yes (auto-generated) | Unique identifier for the product | UUID v4 format         |
+| `name`        | string        | Yes                  | Product name                      | String value           |
+| `description` | string        | Yes                  | Detailed product description      | String value           |
+| `price`       | number        | Yes                  | Product price                     | Must be greater than 0 |
+| `category`    | string        | Yes                  | Product category                  | String value           |
+| `inStock`     | boolean       | Yes                  | Product availability status       | Boolean value          |
+
+### Example Product Object
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "Wireless Headphones",
+  "description": "Noise-cancelling Bluetooth headphones with 30-hour battery life",
+  "price": 89.99,
+  "category": "Electronics",
+  "inStock": true
+}
+```
+
+## API Endpoints
+
+1. Get All Products
+   Endpoint: `GET /api/products`
+
+   Example cURL:
+
+   ```bash
+   curl -X GET http://localhost:3000/api/products
+   ```
+
+2. Get Product by ID
+   Endpoint: `GET /api/products/:id`
+
+   Example cURL:
+
+   ```bash
+   curl -X GET http://localhost:3000/api/products/550e8400-e29b-41d4-a716-446655440000
+   ```
+
+3. Create Product
+   Endpoint: `POST /api/products`
+
+   Example cURL:
+
+   ```bash
+   curl -X POST http://localhost:3000/api/products \
+   -H "Content-Type: application/json" \
+   -d '{
+       "name": "Wireless Headphones",
+       "description": "Noise-cancelling Bluetooth headphones with 30-hour battery life",
+       "price": 89.99,
+       "category": "Electronics",
+       "inStock": true
+   }'
+   ```
+
+4. Update Product (Full Update)
+   Endpoint: `PUT /api/products/:id`
+
+   Example cURL:
+
+   ```bash
+   curl -X PUT http://localhost:3000/api/products/550e8400-e29b-41d4-a716-446655440000 \
+   -H "Content-Type: application/json" \
+   -d '{
+       "name": "Premium Wireless Headphones",
+       "description": "Updated: Premium noise-cancelling headphones with 40-hour battery life",
+       "price": 129.99,
+       "category": "Electronics",
+       "inStock": true
+   }'
+   ```
+
+5. Delete Product
+   Endpoint: `DELETE /api/products/:id`
+
+   Example cURL:
+
+   ```bash
+   curl -X DELETE http://localhost:3000/api/products/550e8400-e29b-41d4-a716-446655440000
+   ```
+
+## Test Command
+
+To run all tests once with verbose output:
+
+> npm test
+
+What happens:
+
+- Vitest discovers all test files (typically _.test.ts or _.spec.ts)
+
+- Executes all test suites
+
+- Displays detailed results using the verbose reporter
+
+- Shows each test case name, status, and execution time
