@@ -21,7 +21,9 @@ Before you begin, ensure you have the following installed:
 
 ## Installation
 
-> npm install
+```
+npm install
+```
 
 ## Running the Application
 
@@ -31,12 +33,12 @@ The application can be run in two modes: development and production.
 
 In development mode, the server runs with hot-reload. Any changes you make to the source code will automatically restart the server.
 
-> npm run start:dev
+```
+npm run start:dev
+```
 
 By default, the server will start on `http://localhost:3000`.
-You should see a message like:
-
-> Server listening on http://localhost:3000
+You should see a message like: `Server listening on http://localhost:3000`
 
 ## Production Mode
 
@@ -44,7 +46,9 @@ For production, the application is built into a single, optimized bundle before 
 
 1. Build and Start (one command):
 
-   > npm run start:prod
+   ```
+   npm run start:prod
+   ```
 
    This command runs two scripts sequentially:
    - build: Bundles the TypeScript code into dist/index.js.
@@ -52,11 +56,14 @@ For production, the application is built into a single, optimized bundle before 
 
 2. Build Only (if you want to build separately):
 
-   > npm run build
+   ```
+   npm run build
+   ```
 
 3. Start Only (after building):
-
-   > npm run start
+   ```
+   npm run start
+   ```
 
 The server will then run on `http://localhost:3000`
 
@@ -153,7 +160,9 @@ All products in the catalog follow this schema:
 
 To run all tests once with verbose output:
 
-> npm test
+```
+npm test
+```
 
 What happens:
 
