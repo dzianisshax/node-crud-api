@@ -12,6 +12,7 @@
     "build": "tsup src/index.ts --format esm --clean",
     "start": "node dist/index.js",
     "start:prod": "npm run build && npm run start",
+    "start:multi": "tsup src/cluster.ts --format esm --clean && node dist/cluster.js",
     "test": "vitest --reporter=verbose"
   },
   "dependencies": {

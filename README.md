@@ -27,7 +27,7 @@ npm install
 
 ## Running the Application
 
-The application can be run in two modes: development and production.
+The application can be run in three modes: development, production and multiple instances.
 
 ## Development Mode
 
@@ -37,8 +37,8 @@ In development mode, the server runs with hot-reload. Any changes you make to th
 npm run start:dev
 ```
 
-By default, the server will start on `http://localhost:3000`.
-You should see a message like: `Server listening on http://localhost:3000`
+By default, the server will start on `http://localhost:3000/api`.
+You should see a message like: `Server listening on http://localhost:3000/api`
 
 ## Production Mode
 
@@ -65,7 +65,18 @@ For production, the application is built into a single, optimized bundle before 
    npm run start
    ```
 
-The server will then run on `http://localhost:3000`
+The server will then run on `http://localhost:3000/api`
+
+## Multiple instances Mode
+
+Script that starts multiple instances:
+
+```
+npm run start:multi
+```
+
+By default, the server will start on `http://localhost:3000/api` with a load balancer that distributes requests across
+instances equal to the number of available parallelism - 1 on the host machine, each listening on port PORT + n.
 
 ## Product Schema
 
